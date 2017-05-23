@@ -10,7 +10,6 @@ class App extends Component {
     super(props);
 
     this.state = {
-      proba: 'proba',
       summonerName: '',
       icon: '',
       level: ''
@@ -46,12 +45,10 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <h2>{this.state.proba}</h2>
-        <h2>{this.state.proba2}</h2>
+        <SearchBar onSearchNameLevelIcon = {this.searchNameLevelIcon.bind(this)} /> <br/>
         <img alt="summoner icon" src={ 'http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/' + this.state.icon +'.png' } />
         <h2>{this.state.summonerName}</h2>
         <h2>{this.state.level}</h2>
-        <SearchBar onSearchNameLevelIcon = {this.searchNameLevelIcon.bind(this)} />
       </div>
     );
   }
