@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import '../styles/App.css';
+import SearchBar from './search';
 
 const API_KEY = "RGAPI-92d2bc4a-a0db-410f-9fde-b59929bcaccc";
 
@@ -13,10 +14,9 @@ class App extends Component {
       summonerName: '',
       icon: '',
       level: ''
-    }
+    };
+
     this.searchNameLevelIcon('xahko');
-
-
   }
 
   searchNameLevelIcon(username){
@@ -51,6 +51,7 @@ class App extends Component {
         <img alt="summoner icon" src={ 'http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/' + this.state.icon +'.png' } />
         <h2>{this.state.summonerName}</h2>
         <h2>{this.state.level}</h2>
+        <SearchBar onSearchNameLevelIcon = {this.searchNameLevelIcon.bind(this)} />
       </div>
     );
   }
