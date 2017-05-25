@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import '../styles/App.css';
 import SearchBar from './search';
-
-const API_KEY = "RGAPI-92d2bc4a-a0db-410f-9fde-b59929bcaccc";
+import API_KEY from '../api_key';
 
 class App extends Component {
   constructor(props){
