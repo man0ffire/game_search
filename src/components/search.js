@@ -12,7 +12,7 @@ export default class SearchBar extends Component {
 
   submitForm(e){
     e.preventDefault();
-    this.props.onSearchNameLevelIcon(this.refs.inputText.value);
+    this.props.onSearchNameLevelIcon(this.refs.inputText.value.replace(/ /g,'').toLowerCase());
   }
 
   render() {
