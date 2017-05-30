@@ -12,7 +12,11 @@ class App extends Component {
     this.state = {
       summonerName: '',
       icon: '',
-      level: ''
+      level: '',
+      normalWins: '',
+      rankedSoloWins: '',
+      rankedSoloLosses: '',
+      aramWins: ''
     };
 
   //  this.searchNameLevelIcon('xahko');
@@ -28,6 +32,18 @@ class App extends Component {
       this.setState({summonerName: name, icon: icon, level:level}, function(){
         console.log(response);
       });
+      let id = response.data[username].id;
+      axios.get('https://euw.api.riotgames.com/api/lol/EUW/v1.3/stats/by-summoner/'+id+'/summary?season=SEASON2017&api_key='+API_KEY)
+      .then((response2) => {
+         let normalWins = response2.data.playerStatSummaries[8].wins;
+         let rankedSoloWins = response2.data.playerStatSummaries[7].wins;
+         let rankedSoloLosses = response2.data.playerStatSummaries[7].losses;
+         let aramWins = response2.data.playerStatSummaries[5].wins;
+         this.setState({normalWins:normalWins,rankedSoloWins:rankedSoloWins,rankedSoloLosses:rankedSoloLosses,aramWins:aramWins}, function(){
+            console.log(response2.data.playerStatSummaries[8].wins);
+         });
+      })
+      .catch((err) => {console.log(err)});
     })
     .catch((error) => {
       console.log(error);
@@ -72,8 +88,12 @@ class App extends Component {
         <div className="container">
           <SearchBar onSearchNameLevelIcon = {this.searchNameLevelIcon.bind(this)} /> <br/>
           <img alt="summoner icon" src={ 'http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/' + this.state.icon +'.png' } />
-          <h2>{this.state.summonerName}</h2>
-          <h2>{this.state.level}</h2>
+          <h2>Summoner Name:{this.state.summonerName}</h2>
+          <h2>Summoner Level: {this.state.level}</h2>
+          <h2>Normal Unraked Wins:{this.state.normalWins}</h2>
+          <h2>Ranked Solo Wins (current season):{this.state.rankedSoloWins}</h2>
+          <h2>Ranked Solo Losses (current season):{this.state.rankedSoloLosses}</h2>
+          <h2>ARAM wins:{this.state.aramWins}</h2>
         </div>
       );
     }
