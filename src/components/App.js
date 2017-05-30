@@ -18,12 +18,9 @@ class App extends Component {
       rankedSoloLosses: '',
       aramWins: ''
     };
-
-  //  this.searchNameLevelIcon('xahko');
   }
 
   searchNameLevelIcon(username){
-
     axios.get('https://euw.api.riotgames.com/api/lol/EUW/v1.4/summoner/by-name/'+username+'?api_key='+API_KEY)
     .then((response) => {
       let name = response.data[username].name;
@@ -35,21 +32,37 @@ class App extends Component {
       let id = response.data[username].id;
       axios.get('https://euw.api.riotgames.com/api/lol/EUW/v1.3/stats/by-summoner/'+id+'/summary?season=SEASON2017&api_key='+API_KEY)
       .then((response2) => {
-         let normalWins = response2.data.playerStatSummaries[8].wins;
-         let rankedSoloWins = response2.data.playerStatSummaries[7].wins;
-         let rankedSoloLosses = response2.data.playerStatSummaries[7].losses;
-         let aramWins = response2.data.playerStatSummaries[5].wins;
+        let normalWins, rankedSoloWins, rankedSoloLosses, aramWins;
+        if(!response2.data.playerStatSummaries){
+          normalWins = 0;
+          rankedSoloWins = 0;
+          rankedSoloLosses =0;
+          aramWins = 0;
+        } else {
+          for(var i = 0; i < response2.data.playerStatSummaries.length; i++){
+            let a = response2.data.playerStatSummaries[i];
+            let b = a.playerStatSummaryType;
+            if(b === "AramUnranked5x5"){
+              aramWins = response2.data.playerStatSummaries[i].wins;
+            }else if (b === "Unranked") {
+              normalWins = response2.data.playerStatSummaries[i].wins
+            }else if (b === "RankedSolo5x5") {
+              rankedSoloWins = response2.data.playerStatSummaries[i].wins;
+              rankedSoloLosses = response2.data.playerStatSummaries[i].losses;
+            }
+          }
+        }
          this.setState({normalWins:normalWins,rankedSoloWins:rankedSoloWins,rankedSoloLosses:rankedSoloLosses,aramWins:aramWins}, function(){
-            console.log(response2.data.playerStatSummaries[8].wins);
+            console.log(response2);
          });
       })
-      .catch((err) => {console.log(err)});
+      .catch((error2) => {
+        console.log(error2)
+      });
     })
     .catch((error) => {
       console.log(error);
   });
-
-
     // $.ajax({
     //   url: 'https://euw.api.riotgames.com/api/lol/EUW/v1.4/summoner/by-name/'+username+'?api_key='+API_KEY,
     //   //headers: { 'Allow-Control-Allow-Origin': '*' },
